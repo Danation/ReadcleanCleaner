@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using ReadcleanCleaner;
 
 namespace CleanerApp
@@ -11,6 +12,7 @@ namespace CleanerApp
     {
         public static void Main(string[] args)
         {
+
             if (args.Length == 0)
             {
                 printUsage();
@@ -19,9 +21,19 @@ namespace CleanerApp
 
             string filepath = args[0];
 
-            Cleaner cleaner = new Cleaner(filepath, filepath + "_clean"); // TODO handle file extension better
+            if (!File.Exists(filepath) || File.GetAttributes(filepath).HasFlag(FileAttributes.Encrypted | FileAttributes.System))
+            {
+                Console.WriteLine("File does not exist or is unreadable");
+                return;
+            }
+
+            string suffix = "_clean";
+            string newFilepath = Path.Combine(Path.GetDirectoryName(filepath), Path.GetFileNameWithoutExtension(filepath) + suffix + Path.GetExtension(filepath));
+
+            Cleaner cleaner = new Cleaner(filepath, newFilepath);
             cleaner.Clean();
 
+            Console.WriteLine(newFilepath);
             Console.ReadLine();
         }
 
