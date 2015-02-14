@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5552E28F-43F5-4DCF-8565-44DC0FCBB36B}</ProjectGuid>
+    <ProjectGuid>{59131E88-E645-4444-9DDB-00552CFCD49C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CleanerApp</RootNamespace>
@@ -48,8 +48,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Source\ReadcleanCleaner.csproj">
-      <Project>{d330861e-2814-4647-9fd3-7bceb08bdbd5}</Project>
+    <ProjectReference Include="..\ReadcleanCleaner\ReadcleanCleaner.csproj">
+      <Project>{29f866a9-446b-4a06-8585-0b3a94eba40e}</Project>
       <Name>ReadcleanCleaner</Name>
     </ProjectReference>
   </ItemGroup>

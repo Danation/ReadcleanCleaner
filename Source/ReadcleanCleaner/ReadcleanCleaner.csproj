@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D330861E-2814-4647-9FD3-7BCEB08BDBD5}</ProjectGuid>
+    <ProjectGuid>{29F866A9-446B-4A06-8585-0B3A94EBA40E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ReadcleanCleaner</RootNamespace>
