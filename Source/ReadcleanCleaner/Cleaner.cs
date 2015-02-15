@@ -15,9 +15,9 @@ namespace ReadcleanCleaner
         private string _destinationFilepath;
         private string _tempDirectory;
 
-        private Dictionary<string, List<string>> rules = new Dictionary<string, List<string>>();
+        private Dictionary<string, List<string>> _rules = new Dictionary<string, List<string>>();
 
-        public Cleaner(string originalFilepath, string destinationFilepath)
+        public Cleaner(string originalFilepath, string destinationFilepath, string ruleListJSONFilepath)
         {
             if (!File.Exists(originalFilepath) || File.Exists(destinationFilepath))
             {
@@ -28,12 +28,20 @@ namespace ReadcleanCleaner
             _tempDirectory = Path.Combine(Path.GetDirectoryName(_originalFilepath),
                                                    Path.GetFileNameWithoutExtension(_originalFilepath));
 
-            //TODO read rules from file
-            List<string> hellList = new List<string>() { "heck", "hades" };
-            rules.Add("hell", hellList);
+            _rules = RulesGenerator.RulesFromJSON(ruleListJSONFilepath);
+        }
 
-            List<string> damnList = new List<string>() { "dang", "darn" };
-            rules.Add("damn", damnList);
+        public Cleaner(string originalFilepath, string destinationFilepath, Dictionary<string, List<string>> rules)
+        {
+            if (!File.Exists(originalFilepath) || File.Exists(destinationFilepath))
+            {
+                throw new IOException("Input file or destination file is invalid");
+            }
+            _originalFilepath = originalFilepath;
+            _destinationFilepath = destinationFilepath;
+            _tempDirectory = Path.Combine(Path.GetDirectoryName(_originalFilepath),
+                                                   Path.GetFileNameWithoutExtension(_originalFilepath));
+            _rules = rules;
         }
 
         public void Clean()
@@ -64,7 +72,7 @@ namespace ReadcleanCleaner
         private string runAllRules(string original)
         {
             string result = original;
-            foreach (string rule in rules.Keys)
+            foreach (string rule in _rules.Keys)
             {
                 result = runRule(result, rule.ToLower());
             }
@@ -73,7 +81,7 @@ namespace ReadcleanCleaner
 
         private string runRule(string original, string searchText)
         {
-            List<string> possibleReplacements = rules[searchText];
+            List<string> possibleReplacements = _rules[searchText];
             Random random = new Random();
 
             string result = Regex.Replace(original, searchText, delegate(Match match) {

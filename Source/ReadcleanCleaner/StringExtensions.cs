@@ -17,14 +17,5 @@ namespace ReadcleanCleaner
                 newString = Char.ToUpper(newString[0]) + newString.Substring(1);
             return newString;
         }
-
-        // http://stackoverflow.com/a/24580455/1192877
-        public static string ReplaceCaseInsensitiveFind(this string str, string findMe, string newValue)
-        {
-            return Regex.Replace(str,
-                Regex.Escape(findMe),
-                Regex.Replace(newValue, "\\$[0-9]+", @"$$$0"),
-                RegexOptions.IgnoreCase);
-        }
     }
 }

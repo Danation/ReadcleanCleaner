@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Rules\Rules.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReadcleanCleaner\ReadcleanCleaner.csproj">

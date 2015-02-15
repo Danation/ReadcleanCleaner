@@ -12,7 +12,6 @@ namespace CleanerApp
     {
         public static void Main(string[] args)
         {
-
             if (args.Length == 0)
             {
                 printUsage();
@@ -20,6 +19,7 @@ namespace CleanerApp
             }
 
             string filepath = args[0];
+            string jsonFilepath = args[1];
 
             if (!File.Exists(filepath) || File.GetAttributes(filepath).HasFlag(FileAttributes.Encrypted | FileAttributes.System))
             {
@@ -34,7 +34,7 @@ namespace CleanerApp
                 newFilepath = Path.Combine(Path.GetDirectoryName(filepath), Path.GetFileNameWithoutExtension(filepath) + suffix + i + Path.GetExtension(filepath));
             }
 
-            Cleaner cleaner = new Cleaner(filepath, newFilepath);
+            Cleaner cleaner = new Cleaner(filepath, newFilepath, jsonFilepath);
             cleaner.Clean();
 
             Console.ReadLine();
