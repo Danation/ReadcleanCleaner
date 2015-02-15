@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 
 namespace ReadcleanCleaner
 {
@@ -65,21 +66,39 @@ namespace ReadcleanCleaner
             string result = original;
             foreach (string rule in rules.Keys)
             {
-                result = runRule(result, rule.ToLower(), rules[rule]);
+                result = runRule(result, rule.ToLower());
             }
             return result;
         }
 
-        private string runRule(string original, string searchText, List<string> possibleReplacements)
+        private string runRule(string original, string searchText)
         {
-            
-            string result = original;
+            List<string> possibleReplacements = rules[searchText];
+            Random random = new Random();
 
-            string replacement = possibleReplacements[0]; //TODO randomly choose which replacement to use
-            
-            result = result.Replace(searchText.ToUpper(), replacement.ToUpper());
-            result = result.Replace(searchText.ToUpperFirstChar(), replacement.ToUpperFirstChar());
-            result = result.ReplaceCaseInsensitiveFind(searchText, replacement);
+            string result = Regex.Replace(original, searchText, delegate(Match match) {
+                string replacement = possibleReplacements[random.Next(possibleReplacements.Count)];
+                string value = match.Value;
+                string matchResult;
+
+                // All upper case
+                if (value.All(c => !char.IsLetter(c) || char.IsUpper(c)))
+                {
+                    matchResult = replacement.ToUpper();
+                }
+                // First letter is upper case
+                else if (char.IsUpper(value[0]))
+                {
+                    matchResult = replacement.ToUpperFirstChar();
+                }
+                // Just do a straight lower case replacement
+                else
+                {
+                    matchResult = replacement;
+                }
+
+                return matchResult;
+            }, RegexOptions.IgnoreCase);
 
             return result;
         }
