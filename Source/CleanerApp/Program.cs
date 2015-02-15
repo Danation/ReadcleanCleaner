@@ -29,11 +29,14 @@ namespace CleanerApp
 
             string suffix = "_clean";
             string newFilepath = Path.Combine(Path.GetDirectoryName(filepath), Path.GetFileNameWithoutExtension(filepath) + suffix + Path.GetExtension(filepath));
+            for (int i = 2; File.Exists(newFilepath); i++)
+            {
+                newFilepath = Path.Combine(Path.GetDirectoryName(filepath), Path.GetFileNameWithoutExtension(filepath) + suffix + i + Path.GetExtension(filepath));
+            }
 
             Cleaner cleaner = new Cleaner(filepath, newFilepath);
             cleaner.Clean();
 
-            Console.WriteLine(newFilepath);
             Console.ReadLine();
         }
 
