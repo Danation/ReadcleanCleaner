@@ -65,16 +65,23 @@ namespace ReadcleanCleaner
             string result = original;
             foreach (string rule in rules.Keys)
             {
-                result = runRule(result, rule, rules[rule]);
+                result = runRule(result, rule.ToLower(), rules[rule]);
             }
             return result;
         }
 
         private string runRule(string original, string searchText, List<string> possibleReplacements)
         {
-            //TODO randomly choose which replacement to use
-            //TODO manage case sensitivity
-            return original.Replace(searchText, possibleReplacements[0]);
+            
+            string result = original;
+
+            string replacement = possibleReplacements[0]; //TODO randomly choose which replacement to use
+            
+            result = result.Replace(searchText.ToUpper(), replacement.ToUpper());
+            result = result.Replace(searchText.ToUpperFirstChar(), replacement.ToUpperFirstChar());
+            result = result.ReplaceCaseInsensitiveFind(searchText, replacement);
+
+            return result;
         }
 
         private void CreateTempDirectory()
