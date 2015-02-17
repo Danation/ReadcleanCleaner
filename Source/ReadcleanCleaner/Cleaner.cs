@@ -11,6 +11,8 @@ namespace ReadcleanCleaner
 {
     public class Cleaner
     {
+        public TextWriter Output { get; set; }
+
         private string _originalFilepath;
         private string _destinationFilepath;
         private string _tempDirectory;
@@ -105,6 +107,14 @@ namespace ReadcleanCleaner
                     matchResult = replacement;
                 }
 
+                // Log result
+                if (Output != null)
+                {
+                    int startIndex = Math.Max(match.Index - 10, 0); //10 chars before or beginning of string
+                    int length = Math.Min(value.Length + 20, original.Length - match.Index); //10 chars after or end of string
+                    string context = original.Substring(startIndex, length); 
+                    Log(string.Format("Replaced: {0} \t With: {1} \t In: {2}", value, matchResult, context));
+                }
                 return matchResult;
             }, RegexOptions.IgnoreCase);
 
@@ -116,7 +126,7 @@ namespace ReadcleanCleaner
             if (Directory.Exists(_tempDirectory))
             {
                 int i;
-                for (i = 2; Directory.Exists(_tempDirectory + i); i++) {}
+                for (i = 2; Directory.Exists(_tempDirectory + i); i++) { }
                 _tempDirectory += i;
             }
             Directory.CreateDirectory(_tempDirectory);
@@ -140,6 +150,14 @@ namespace ReadcleanCleaner
         private void DeleteTempDirectory()
         {
             Directory.Delete(_tempDirectory, true);
+        }
+
+        private void Log(string message)
+        {
+            if (Output != null)
+            {
+                Output.WriteLine(message);
+            }
         }
     }
 }

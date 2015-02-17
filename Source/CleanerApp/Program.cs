@@ -35,6 +35,7 @@ namespace CleanerApp
             }
 
             Cleaner cleaner = new Cleaner(filepath, newFilepath, jsonFilepath);
+            cleaner.Output = Console.Out;
             cleaner.Clean();
 
             Console.ReadLine();

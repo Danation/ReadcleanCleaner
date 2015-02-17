@@ -1,13 +1,14 @@
 {
     "rules": {
         "motherfucker": "fucker replacements",
-        "motherfucking?": "fucking replacements",
+        "motherfuckin": "fuckin replacements",
         "motherfucked": "fucked replacements",
         "motherfuck": "fuck replacements",
         "fucker": "fucker replacements",
-        "fucking?": "fucking replacements",
+        "fuckin": "fuckin replacements",
         "fucked": "fucked replacements",
         "fuck": "fuck replacements",
+        "cunts": "cunts replacements",
         "cunt": "cunt replacements",
         "shitt": "shitt replacements",
         "shit": "shit replacements",
@@ -27,15 +28,18 @@
         "Gods?(\\s|-)*d?am(m|n)(\\s|-)*it": "God dammit replacements",
         "Gods?(\\s|-)*d?amned": "God damned replacements",
         "Gods?(\\s|-)*d?amn?": "God damn replacements",
-        "for God'?s sake": "God's sake replacements",
-        "oh ?my ?God": "omg replacements"
+        "God'?s sake": "God's sake replacements",
+        "oh ?my ?God": "omg replacements",
+        "Christing": "fuckin replacements",
+        "chrissake": "God's sake replacements"
     },
     "replacements": {
         "fucker replacements": [ "dirtbag", "scumbag", "douchebag" ],
-        "fucking replacements": [ "freaking", "fricking" ],
+        "fuckin replacements": [ "freakin", "frickin" ],
         "fucked replacements": [ "screwed" ],
         "fuck replacements": [ "screw", "bang" ],
         "cunt replacements": [ "pussy", "muff" ],
+        "cunts replacements":  [ "pussies", "muffs" ],
         "shitt replacements": [ "crapp" ],
         "shit replacements": [ "crap", "crud" ],
         "bitching replacements": [ "whining", "complaining" ],
@@ -49,7 +53,7 @@
         "God dammit replacements": [ "dammit" ],
         "God damned replacements": [ "damned" ],
         "God damn replacements": [ "damn" ],
-        "God's sake replacements": [ "for heavens sake" ],
+        "God's sake replacements": [ "heaven's sake" ],
         "omg replacements": [ "oh my gosh" ],
         "hardass replacements": [ "hardcase" ]
     }
