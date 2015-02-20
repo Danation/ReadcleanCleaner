@@ -60,7 +60,10 @@ namespace ReadcleanCleaner
             string[] fileList = GetAllFiles();
             foreach (string file in fileList)
             {
-                CleanFile(file);
+                if (file.ToLower().Contains("html"))
+                {
+                    CleanFile(file);
+                }
             }
         }
 
