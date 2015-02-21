@@ -1,13 +1,14 @@
 {
     "rules": {
         "motherfucker": "fucker replacements",
+        "muthafuckah": "fucker replacements",
         "motherfuckin": "fuckin replacements",
         "motherfucked": "fucked replacements",
         "motherfuck": "fuck replacements",
+        "muthafuck": "fuck replacements",
         "fucker": "fucker replacements",
         "fuckin": "fuckin replacements",
         "fucked": "fucked replacements",
-        "(?<!what|who|where ?the ?)fuck": "wtf replacements",
         "fuck": "fuck replacements",
         "cunts": "cunts replacements",
         "cunt": "cunt replacements",

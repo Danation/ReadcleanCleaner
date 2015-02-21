@@ -15,7 +15,6 @@ namespace ReadcleanCleaner
 
         private string _originalFilepath;
         private string _destinationFilepath;
-        private string _tempDirectory;
 
         private Dictionary<string, List<string>> _rules = new Dictionary<string, List<string>>();
 
@@ -27,9 +26,6 @@ namespace ReadcleanCleaner
             }
             _originalFilepath = originalFilepath;
             _destinationFilepath = destinationFilepath;
-            _tempDirectory = Path.Combine(Path.GetDirectoryName(_originalFilepath),
-                                                   Path.GetFileNameWithoutExtension(_originalFilepath));
-
             _rules = RulesGenerator.RulesFromJSON(ruleListJSONFilepath);
         }
 
@@ -41,40 +37,74 @@ namespace ReadcleanCleaner
             }
             _originalFilepath = originalFilepath;
             _destinationFilepath = destinationFilepath;
-            _tempDirectory = Path.Combine(Path.GetDirectoryName(_originalFilepath),
-                                                   Path.GetFileNameWithoutExtension(_originalFilepath));
             _rules = rules;
         }
 
+        /// <summary>
+        /// Given the epub in the contructor, this copies the epub and cleans the copy
+        /// </summary>
         public void Clean()
         {
-            CreateTempDirectory();
-            ExtractEpub();
-            CleanAllFiles();
             CreateNewEpub();
-            DeleteTempDirectory();
+
+            using (ZipArchive archive = ZipFile.Open(_destinationFilepath, ZipArchiveMode.Update))
+            {
+                CleanArchive(archive);
+            }
         }
 
-        private void CleanAllFiles()
+        private void CreateNewEpub()
         {
-            string[] fileList = GetAllFiles();
-            foreach (string file in fileList)
+            File.Copy(_originalFilepath, _destinationFilepath, true);
+        }
+
+        private void CleanArchive(ZipArchive archive)
+        {
+            foreach (ZipArchiveEntry entry in archive.Entries)
             {
-                if (file.ToLower().Contains("html"))
+                if (entry.FullName.ToLower().Contains("html"))
                 {
-                    CleanFile(file);
+                    CleanZipArchiveEntry(entry);
                 }
             }
         }
 
-        private void CleanFile(string filepath)
+        private void CleanZipArchiveEntry(ZipArchiveEntry entry)
         {
-            string filetext = File.ReadAllText(filepath);
-            string newFiletext = runAllRules(filetext);
-            File.WriteAllText(filepath, newFiletext);
+            string fileContents = ReadEntryContents(entry);
+            string changedContents = RunAllRules(fileContents);
+
+            WriteNewEntryContents(entry, changedContents);
         }
 
-        private string runAllRules(string original)
+        private string ReadEntryContents(ZipArchiveEntry entry)
+        {
+            string fileContents;
+            using (Stream stream = entry.Open())
+            {
+                using (TextReader reader = new StreamReader(stream))
+                {
+                    fileContents = reader.ReadToEnd();
+                    reader.Close();
+                }
+            }
+
+            return fileContents;
+        }
+
+        private void WriteNewEntryContents(ZipArchiveEntry entry, string newContents)
+        {
+            using (Stream stream = entry.Open())
+            {
+                using (TextWriter writer = new StreamWriter(stream))
+                {
+                    writer.Write(newContents);
+                    writer.Close();
+                }
+            }
+        }
+
+        private string RunAllRules(string original)
         {
             string result = original;
             foreach (string rule in _rules.Keys)
@@ -122,37 +152,6 @@ namespace ReadcleanCleaner
             }, RegexOptions.IgnoreCase);
 
             return result;
-        }
-
-        private void CreateTempDirectory()
-        {
-            if (Directory.Exists(_tempDirectory))
-            {
-                int i;
-                for (i = 2; Directory.Exists(_tempDirectory + i); i++) { }
-                _tempDirectory += i;
-            }
-            Directory.CreateDirectory(_tempDirectory);
-        }
-
-        private string[] GetAllFiles()
-        {
-            return Directory.GetFiles(_tempDirectory, "*.*", SearchOption.AllDirectories);
-        }
-
-        private void ExtractEpub()
-        {
-            ZipFile.ExtractToDirectory(_originalFilepath, _tempDirectory);
-        }
-
-        private void CreateNewEpub()
-        {
-            ZipFile.CreateFromDirectory(_tempDirectory, _destinationFilepath);
-        }
-
-        private void DeleteTempDirectory()
-        {
-            Directory.Delete(_tempDirectory, true);
         }
 
         private void Log(string message)
