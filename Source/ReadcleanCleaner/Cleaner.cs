@@ -62,7 +62,7 @@ namespace ReadcleanCleaner
         {
             foreach (ZipArchiveEntry entry in archive.Entries)
             {
-                if (entry.FullName.ToLower().Contains("html"))
+                if (entry.FullName.ToLower().Contains("htm"))
                 {
                     CleanZipArchiveEntry(entry);
                 }
@@ -117,7 +117,7 @@ namespace ReadcleanCleaner
         private string runRule(string original, string searchText)
         {
             List<string> possibleReplacements = _rules[searchText];
-            Random random = new Random();
+            Random random = new Random(1366);
 
             string result = Regex.Replace(original, searchText, delegate(Match match) {
                 string replacement = possibleReplacements[random.Next(possibleReplacements.Count)];
@@ -146,7 +146,7 @@ namespace ReadcleanCleaner
                     int startIndex = Math.Max(match.Index - 10, 0); //10 chars before or beginning of string
                     int length = Math.Min(value.Length + 20, original.Length - match.Index); //10 chars after or end of string
                     string context = original.Substring(startIndex, length); 
-                    Log(string.Format("Replaced: {0} \t With: {1} \t In: {2}", value, matchResult, context));
+                    Log(string.Format("Replaced: {0} \t With: {1}\n In: {2}\n", value, matchResult, context));
                 }
                 return matchResult;
             }, RegexOptions.IgnoreCase);
