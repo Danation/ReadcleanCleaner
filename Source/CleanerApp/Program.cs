@@ -21,9 +21,15 @@ namespace CleanerApp
             string filepath = args[0];
             string jsonFilepath = args[1];
 
+            if (!File.Exists(jsonFilepath) || File.GetAttributes(jsonFilepath).HasFlag(FileAttributes.Encrypted | FileAttributes.System))
+            {
+                Console.WriteLine("Rules file does not exist or is unreadable");
+                return;
+            }
+
             if (!File.Exists(filepath) || File.GetAttributes(filepath).HasFlag(FileAttributes.Encrypted | FileAttributes.System))
             {
-                Console.WriteLine("File does not exist or is unreadable");
+                Console.WriteLine("Epub file does not exist or is unreadable");
                 return;
             }
 
@@ -38,12 +44,14 @@ namespace CleanerApp
             cleaner.Output = Console.Out;
             cleaner.Clean();
 
-            Console.ReadLine();
+            #if DEBUG
+                Console.ReadLine();
+            #endif
         }
 
         public static void printUsage()
         {
-            // TODO
+            Console.WriteLine("usage: CleanerApp.exe [book filepath] [rules json filepath]");
         }
     }
 }
